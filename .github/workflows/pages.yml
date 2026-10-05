@@ -1,0 +1,32 @@
+name: Publish That Summer
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Restore complete bilingual scene
+        run: |
+          cat site.zip.part* > /tmp/site.zip
+          echo 'f068ee99ced19487d5e5b7ac269781d187a43c0a2b53faef1c85f38efc379aed  /tmp/site.zip' | sha256sum -c -
+          unzip -q /tmp/site.zip -d _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v4
