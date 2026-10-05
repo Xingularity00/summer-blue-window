@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Restore complete bilingual scene
         run: |
-          cat site.zip.part* > /tmp/site.zip
+          curl --fail --location --retry 3 https://github.com/Xingularity00/summer-blue-window/releases/download/v24.0/site.zip -o /tmp/site.zip
           echo 'f068ee99ced19487d5e5b7ac269781d187a43c0a2b53faef1c85f38efc379aed  /tmp/site.zip' | sha256sum -c -
           unzip -q /tmp/site.zip -d _site
       - uses: actions/configure-pages@v5
